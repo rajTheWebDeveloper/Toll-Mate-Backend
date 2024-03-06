@@ -6,6 +6,7 @@ interface Toll
     route:string;
     noOfTolls:number;
     distance:number;
+    tollCost:number;
     tollsBetween:[{
         tollName:string;
         tollLocation:[number,number];

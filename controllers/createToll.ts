@@ -11,6 +11,7 @@ interface CreateTollReqest extends Request{
     noOfTolls:number;
     tollName:string;
     tollLocation:[number,number];
+    tollCost:number | null;
     projectType:string;
     car:number;
     lcv:number;
@@ -26,7 +27,7 @@ interface CreateTollReqest extends Request{
 
 let createToll=async (req:CreateTollReqest,res:Response)=>
 {
-    let {source,destination,distance,noOfTolls,tollName,tollLocation,projectType,car,lcv,busMultiAxle,multiAxle,heavyVehicle,fourToSixAxle,sevenOrMoreAxle}=req.body;
+    let {source,destination,distance,noOfTolls,tollName,tollLocation,projectType,car,lcv,busMultiAxle,multiAxle,heavyVehicle,fourToSixAxle,sevenOrMoreAxle,tollCost}=req.body;
     try 
     {
     let foundRoute=await Toll.findOne({'$or':[{route:`${destination.toLowerCase()}~${source.toLowerCase()}`},{route:`${source.toLowerCase()}~${destination.toLowerCase()}`}]});
@@ -42,6 +43,7 @@ let createToll=async (req:CreateTollReqest,res:Response)=>
                         tollName:tollName.toLowerCase(),
                         tollLocation:tollLocation,
                         projectType:projectType,
+                        tollCost:null,
                         car:car,
                         lcv:lcv,
                         busMultiAxle:busMultiAxle,
@@ -49,7 +51,6 @@ let createToll=async (req:CreateTollReqest,res:Response)=>
                         heavyVehicle:heavyVehicle,
                         fourToSixAxle:fourToSixAxle,
                         sevenOrMoreAxle:sevenOrMoreAxle
-
                     }
                 ]
             })
