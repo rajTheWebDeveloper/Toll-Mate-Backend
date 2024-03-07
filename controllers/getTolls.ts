@@ -18,27 +18,31 @@ let getTolls=async (req:getTollRequest,res:Response)=>
     let foundTollData=await Toll.findOne({
         '$or':[{route:`${source}~${destination}`},{route:`${destination}~${source}`}]
     })
-    console.log(vehicleType)
-    let tollObject=await JSON.parse(JSON.stringify(foundTollData?.tollsBetween[0]));
-        let tollCost:(number | null)=null;
-        for(let [key,value] of Object.entries(tollObject))
-        {
-            if(key===vehicleType)
-            {
-                tollCost=Number(value)
-            }
-        }
 
     if(foundTollData)
     {
-        return res.send({success:true,msg:"Retrieved data successfully",foundTollData:foundTollData})
+        let tollObject=await JSON.parse(JSON.stringify(foundTollData?.tollsBetween));
+        let tollCost:number=0;
+        console.log(tollCost)
+        tollObject.map((items:any)=>
+        {
+            for(let [key,value] of Object.entries(items))
+            {
+                if(key===vehicleType)
+                {
+                    tollCost+=Number(value)
+                }
+            }
+        })
+        console.log(tollCost)
+        console.log(foundTollData)
+        let ultimateTollData={...JSON.parse(JSON.stringify(foundTollData)),tollCost:tollCost}
+        return res.send({success:true,msg:"Retrieved data successfully",foundTollData:ultimateTollData})
     }
     else 
     {
         return res.send({success:false,msg:"No such routes exists"})
     }
-
 }
-
 
 export default getTolls

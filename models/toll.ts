@@ -1,12 +1,11 @@
 import mongoose from "mongoose";
 
-
 interface Toll
 {
     route:string;
     noOfTolls:number;
     distance:number;
-    tollCost:number;
+    tollCost:number | null;
     tollsBetween:[{
         tollName:string;
         tollLocation:[number,number];
@@ -33,6 +32,10 @@ let tollSchema=new mongoose.Schema<TollModel>({
     },
     distance:{
         type:Number
+    },
+    tollCost:{
+        type:Number,
+        default:null
     },
     tollsBetween:[
         {
