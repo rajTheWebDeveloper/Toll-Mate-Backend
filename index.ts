@@ -10,7 +10,11 @@ env.config({
 })
 
 app.use(express.json())
-app.use(cors())
+app.use(cors({
+  origin: '*',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+}));
 app.use('/toll',tollRoutes)
 
 
@@ -19,7 +23,7 @@ let port=process.env.PORT || 2000
 let start=async ()=>
 {
     await connect()
-    app.listen(2000,()=>
+    app.listen(port,()=>
     {
         console.log(`Listening to port ${port}`)
     })
